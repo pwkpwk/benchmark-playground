@@ -4,7 +4,6 @@ using BenchmarkDotNet.Diagnosers;
 
 namespace AmbientBytes.Benchmark;
 
-[HardwareCounters(HardwareCounter.BranchMispredictions, HardwareCounter.BranchInstructions, HardwareCounter.CacheMisses)]
 public class DataProcessorBenchmarks
 {
     private Random? _random;
