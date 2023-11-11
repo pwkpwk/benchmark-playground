@@ -68,21 +68,25 @@ public sealed class Pavlik : IDataProcessor
         {
             return 0;
         }
-        
-        int w = 0;
-        
+
+        HashSet<long> observedIds = new(data.Count - start);
+        int w = 1;
+
+        observedIds.Add(data[start].Id);
         for (int r = start + 1; r < data.Count; ++r)
         {
-            if (data[r].Id != data[start + w].Id)
+            if (!observedIds.Contains(data[r].Id))
             {
-                if (++w != r)
+                observedIds.Add(data[r].Id);
+                if (w + start != r)
                 {
                     data[start + w] = data[r];
                 }
+                ++w;
             }
         }
 
-        return w + 1;
+        return w;
     }
 
     private static IComparer<Entity> EntityComparerForOrder(IDataProcessor.Order order) =>

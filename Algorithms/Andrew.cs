@@ -13,9 +13,11 @@ public sealed class Andrew : IDataProcessor
         response = order == IDataProcessor.Order.Ascending
             ? response.OrderBy(x => x.Id).Take(count).ToList()
             : response.OrderByDescending(x => x.Id).Take(count).ToList();
-        
-        existingData.AddRange(response);
 
-        return existingData;
+        var output = new List<Entity>(input.Count + existingData.Count);
+        output.AddRange(existingData);
+        output.AddRange(response);
+
+        return output;
     }
 }
