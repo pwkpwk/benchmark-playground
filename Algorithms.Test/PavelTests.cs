@@ -1,14 +1,14 @@
 namespace AmbientBytes.Algorithms.Test;
 
-[TestFixture]
-public class PavlikTests
+[TestFixture, Parallelizable(ParallelScope.All)]
+public class PavelTests
 {
     private IDataProcessor _proccessor;
 
     [SetUp]
     public void Setup()
     {
-        _proccessor = new Pavlik();
+        _proccessor = new Pavel();
     }
 
     [TestCase(new[] { 1L, 2L, 3L, 4L }, new long[0], 1L, IDataProcessor.Order.Ascending, 10, new[] { 2L, 3L, 4L })]
@@ -38,7 +38,7 @@ public class PavlikTests
 
         foreach (var id in ids)
         {
-            list.Add(new Entity(id, id * id, DateTime.Now));
+            list.Add(new Entity(id, id, DateTime.Now));
         }
 
         return list;

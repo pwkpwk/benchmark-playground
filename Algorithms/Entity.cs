@@ -1,6 +1,6 @@
 ﻿namespace AmbientBytes.Algorithms;
 
-public sealed class Entity
+public class Entity
 {
     public long Id { get; }
     public long RandomValue { get; }

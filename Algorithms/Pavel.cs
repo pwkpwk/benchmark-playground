@@ -2,7 +2,7 @@
 
 namespace AmbientBytes.Algorithms;
 
-public sealed class Pavlik : IDataProcessor
+public sealed class Pavel : IDataProcessor
 {
     IEnumerable<Entity> IDataProcessor.ProcessData(List<Entity> input, long startAfterId, IDataProcessor.Order order, int count, List<Entity> existingData)
     {
@@ -47,7 +47,7 @@ public sealed class Pavlik : IDataProcessor
 
         while (ub - lb > 1)
         {
-            int middle = (lb + ub) / 2;
+            int middle = (lb + ub) >> 1;
 
             if (order.Compare(data[middle].Id, id) <= 0)
             {
@@ -72,12 +72,12 @@ public sealed class Pavlik : IDataProcessor
         HashSet<long> observedIds = new(data.Count - start);
         int w = 1;
 
-        observedIds.Add(data[start].Id);
+        observedIds.Add(data[start].RandomValue);
         for (int r = start + 1; r < data.Count; ++r)
         {
-            if (!observedIds.Contains(data[r].Id))
+            if (!observedIds.Contains(data[r].RandomValue))
             {
-                observedIds.Add(data[r].Id);
+                observedIds.Add(data[r].RandomValue);
                 if (w + start != r)
                 {
                     data[start + w] = data[r];
@@ -98,13 +98,13 @@ public sealed class Pavlik : IDataProcessor
     private sealed class AscendingEntityOrder : IComparer<Entity>
     {
         public static readonly IComparer<Entity> Comparer = new AscendingEntityOrder();
-        int IComparer<Entity>.Compare(Entity? x, Entity? y) => x.Id.CompareTo(y.Id);
+        int IComparer<Entity>.Compare(Entity x, Entity y) => x.Id.CompareTo(y.Id);
     }
 
     private sealed class DescendingEntityOrder : IComparer<Entity>
     {
         public static readonly IComparer<Entity> Comparer = new DescendingEntityOrder();
-        int IComparer<Entity>.Compare(Entity? x, Entity? y) => y.Id.CompareTo(x.Id);
+        int IComparer<Entity>.Compare(Entity x, Entity y) => y.Id.CompareTo(x.Id);
     }
     
     private sealed class AscendingIdOrder : IComparer<long>

@@ -1,6 +1,5 @@
 ﻿using AmbientBytes.Algorithms;
 using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Diagnosers;
 
 namespace AmbientBytes.Benchmark;
 
@@ -13,7 +12,7 @@ public class DataProcessorBenchmarks
     private IDataProcessor? _andrew;
     
     [Params(10, 50, 100)] public int InputSize;
-    [Params(0, 15, 30)] public int ExistingDataSize;
+    [Params(0, 25, 200)] public int ExistingDataSize;
     [Params(false, true)] public bool Shuffle;
     
     [GlobalSetup]
@@ -27,7 +26,7 @@ public class DataProcessorBenchmarks
 
         for (int i = 0; i < InputSize; ++i)
         {
-            _input.Add(new Entity(id, _random.NextInt64(), DateTime.Now));
+            _input.Add(new Entity(id, _random.NextInt64(1L, InputSize * 4L), DateTime.Now));
             id += _random.NextInt64(1L, 5L);
         }
 
@@ -38,7 +37,11 @@ public class DataProcessorBenchmarks
 
         for (int i = 0; i < ExistingDataSize; ++i)
         {
-            _existingData.Add(new Entity(id, _random.NextInt64(), DateTime.Now));
+            _existingData.Add(new Entity(
+                id,
+                // Every other item has a duplicate RandomValue
+                (i % 2 == 0 ? InputSize + i : _input[_random.Next(InputSize)].RandomValue),
+                DateTime.Now));
             id += _random.NextInt64(1L, 5L);
         }
 
@@ -47,12 +50,12 @@ public class DataProcessorBenchmarks
             ShuffleList(_existingData);
         }
 
-        _pavlik = new Pavlik();
+        _pavlik = new Pavel();
         _andrew = new Andrew();
     }
 
     [Benchmark]
-    public void Pavlik()
+    public void Pavel()
     {
         _pavlik!.ProcessData(_input, _input[_input.Count / 3].Id, IDataProcessor.Order.Ascending,
             InputSize + ExistingDataSize, _existingData);

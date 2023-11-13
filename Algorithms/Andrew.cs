@@ -8,7 +8,7 @@ public sealed class Andrew : IDataProcessor
             ? input.Where(x => x.Id > startAfterId).ToList()
             : input.Where(x => x.Id < startAfterId).ToList();
 
-        response.RemoveAll(item => existingData.Any(x => item.Id == x.Id));
+        response.RemoveAll(item => existingData.Any(x => item.RandomValue == x.RandomValue));
 
         response = order == IDataProcessor.Order.Ascending
             ? response.OrderBy(x => x.Id).Take(count).ToList()
