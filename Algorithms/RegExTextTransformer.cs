@@ -36,9 +36,12 @@ public class RegExTextTransformer(
             }
             else
             {
-                var gap = textSpan.Slice(offset, group.Index - offset);
+                if (group.Index > offset)
+                {
+                    var gap = textSpan.Slice(offset, group.Index - offset);
+                    builder.Append(gap);
+                }
                 offset = group.Index + group.Length;
-                builder.Append(gap);
 
                 if (replacements.TryGetValue(group.Name, out var replacement))
                 {
