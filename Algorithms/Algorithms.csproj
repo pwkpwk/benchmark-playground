@@ -1,11 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>AmbientBytes.Algorithms</RootNamespace>
         <Company>Ambient Bytes</Company>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
+    </ItemGroup>
 
 </Project>
