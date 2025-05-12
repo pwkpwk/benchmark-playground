@@ -8,6 +8,10 @@ public class GroupValueParser : IGroupValueParser
     {
         Dictionary<string, string> result = new();
         
+        // Parse the most primitive format: {name1}={value1}, {name2}={value2}, ...
+        // comma-separated list of key-value pairs separated by '=', so neither commas nor equal signs
+        // are allowed in names and values.
+        // Whitespace around names and values is ignored.
         foreach (var token in text.Tokenize(','))
         {
             AddGroupValue(result, token.Trim());
