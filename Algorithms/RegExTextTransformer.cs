@@ -9,6 +9,19 @@ namespace AmbientBytes.Algorithms;
 /// </summary>
 /// <param name="regEx">Regular expression string with marked groups</param>
 /// <param name="replacements">Dictionary of matched group replacements.</param>
+/// <param name="options">Options to pass to the underlying <see cref="Regex"/> object</param>
+/// <remarks>
+/// The class replaces groups matched by the regular expression passed in <c>regEx</c> argument with valued from the <c>replacements</c> dictionary.
+/// Groups may be named or anonymous, in which case .NET matcher gives them numerical sequential names.
+/// <code>
+/// // This sample will print '--a--.--b--.Dragon'  
+/// ITextTransformer transformer = new RegExTextTransformer(
+///     @"^(\s*)(?<a>[0-9]+)\.(?<b>[0-9]+)\.[^\s]*(\s*)$",
+///     new Dictionary { { "a", "--a--" }, { "b", "--b--" } });
+/// 
+/// Console.WriteLine(transformer.Transform("  123.456.Dragon  "));
+/// </code>
+/// </remarks>
 public class RegExTextTransformer(
     string regEx,
     IDictionary<string, string> replacements,
@@ -28,6 +41,7 @@ public class RegExTextTransformer(
         var rl = (IReadOnlyList<Group>)groups;
         Group[] array = rl.ToArray();
 
+        // The first match is always the match object itself, which is not needed, so we remove it
         var span = array.AsSpan().Slice(1);
         
         span.Sort(GroupComparer.Comparer);
@@ -62,7 +76,11 @@ public class RegExTextTransformer(
         
         return builder.ToString();
     }
-    
+
+    /// <summary>
+    /// Comparer that orders matched groups in the ascending order by the index (position of the first matched character
+    /// in the original string)
+    /// </summary>
     private sealed class GroupComparer : IComparer<Group>
     {
         public static readonly IComparer<Group> Comparer = new GroupComparer();
